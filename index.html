@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Platformer Game</title>
+	<style>
+		canvas {
+			border: 1px solid black;
+			background-color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Platformer Game</h1>
+	</header>
+	<main>
+		<canvas id="canvas" width="800" height="600"></canvas>
+	</main>
+	<footer>
+		<p>© 2023 Platformer Game</p>
+	</footer>
+	<script>
+		const canvas = document.getElementById("canvas");
+		const ctx = canvas.getContext("2d");
+	</script>
+</body>
+</html>
+<script>
+	const canvas = document.getElementById("canvas");
+	const ctx = canvas.getContext("2d");
+	
+	// Platform
+	ctx.fillStyle = "#888";
+	ctx.fillRect(100, 500, 600, 50);
+	
+	// Player
+	const player = {
+		x: 200,
+		y: 450,
+		width: 50,
+		height: 50,
+		jumping: false,
+		velocity: {
+			x: 0,
+			y: 0
+		}
+	};
+	
+	function drawPlayer() {
+		ctx.fillStyle = "#f00";
+		ctx.fillRect(player.x, player.y, player.width, player.height);
+	}
+	
+	function updatePlayer() {
+		if (player.jumping) {
+			player.velocity.y += 0.5;
+			player.y += player.velocity.y;
+			if (player.y >= 450) {
+				player.y = 450;
+				player.velocity.y = 0;
+				player.jumping = false;
+			}
+		}
+	}
+	
+	function jump() {
+		if (!player.jumping) {
+			player.jumping = true;
+			player.velocity.y = -10;
+		}
+	}
+	
+	document.addEventListener("keydown", (event) => {
+		if (event.code === "Space") {
+			jump();
+		}
+	});
+	
+	function gameLoop() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		drawPlayer();
+		updatePlayer();
+		requestAnimationFrame(gameLoop);
+	}
+	
+	gameLoop();
+</script>
